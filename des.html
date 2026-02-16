@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DES Family Fest · side by side + surprises</title>
+  <!-- fonts & confetti -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+
+    body {
+      background: #572c02;
+      color: white;
+      overflow-x: hidden;
+    }
+
+
+    /* --- navigation UPDATED: left corner DES Family Fest, right corner menu --- */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      z-index: 1000;
+     
+      transition: 0.4s ease;
+    }
+
+
+    nav.scrolled {
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+    }
+
+    /* Left corner - DES Family Fest */
+    .nav-brand {
+      font-size: 24px;
+      font-weight: 700;
+      color: #f9a825;
+      letter-spacing: 1px;
+    }
+
+    .nav-brand span {
+      color: white;
+      font-weight: 300;
+    }
+
+    /* Right corner - menu items */
+    nav ul {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+    }
+
+
+    nav ul li a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0%;
+      height: 3px;
+      background: #f9a825;
+      transition: 0.4s;
+    }
+
+
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+
+
+    /* HERO  BACKGROUND */
+    .hero {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8%;
+      background: url('image.png') center/cover no-repeat;
+      position: relative;
+      animation: moveBg 25s linear infinite alternate;
+    }
+
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4));
+    }
+
+
+    .hero-content {
+      max-width: 600px;
+      z-index: 2;
+      animation: fadeUp 1.5s ease forwards;
+    }
+
+
+    .hero h1 {
+      font-size: 60px;
+      font-weight: 800;
+      animation: textGlow 2s infinite alternate;
+    }
+
+
+    .hero h1 span {
+      color: #f9a825;
+    }
+
+
+    /*  LOGO  */
+    .logo-container {
+      width: 720px;
+      height: 720px;
+      perspective: 1200px;
+      z-index: 2;
+      transition: transform 0.5s ease;
+    }
+
+
+    .logo-container:hover {
+      transform: translateY(-10px) rotateX(5deg) rotateY(10deg) scale(1.05);
+    }
+
+
+    .logo-box {
+      width: 100%;
+      height: 100%;
+      animation: rotate3d 10s linear infinite;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+
+
+    .logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 30px #f9a825);
+      border-radius: 20px;
+      background: transparent;
+    }
+   
+    .logo-box::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+     
+      pointer-events: none;
+      border-radius: 20px;
+    }
+
+
+    /*  buttons  */
+    .btn {
+      padding: 14px 30px;
+      margin: 12px 12px 12px 0;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.4s;
+    }
+
+
+    .primary {
+      background: #f9a825;
+      color: black;
+      animation: btnGlow 2s infinite alternate;
+    }
+
+
+    .secondary {
+      background: transparent;
+      border: 2px solid white;
+      color: white;
+    }
+
+
+    .btn:hover {
+      transform: translateY(-6px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    }
+
+
+    /* zones (flip cards */
+    section {
+      padding: 100px 8%;
+      text-align: center;
+    }
+
+
+    .section-title {
+      font-size: 45px;
+      margin-bottom: 60px;
+    }
+
+
+    .zone-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 40px;
+      perspective: 1000px;
+    }
+
+
+    .zone-card {
+      height: 300px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: 0.8s;
+      cursor: pointer;
+    }
+
+
+    .zone-card:hover {
+      transform: rotateY(180deg);
+    }
+
+
+    .zone-front, .zone-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      backface-visibility: hidden;
+    }
+
+
+    .zone-front {
+      background: linear-gradient(135deg, #1c1c1c, #2a2a2a);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+
+    .zone-back {
+      background: #f9a825;
+      color: black;
+      transform: rotateY(180deg);
+    }
+
+
+    /* ===== EVENT SCHEDULE SECTION ===== */
+    .schedule-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 30px;
+      padding: 40px;
+      border: 1px solid #f9a825;
+    }
+
+    .schedule-headline {
+      font-size: 48px;
+      font-weight: 800;
+      color: #f9a825;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .schedule-subheadline {
+      font-size: 32px;
+      margin-bottom: 40px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .schedule-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 25px;
+      margin: 10px 0;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50px;
+      font-size: 20px;
+      border-left: 5px solid #f9a825;
+      text-align: left;
+    }
+
+    .schedule-item span:first-child {
+      min-width: 250px;
+      font-weight: 700;
+      color: #f9a825;
+    }
+
+    .schedule-item span:last-child {
+      color: white;
+    }
+
+    @media(max-width: 700px) {
+      .schedule-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+      }
+      .schedule-headline {
+        font-size: 36px;
+      }
+    }
+    /* ===== END EVENT SCHEDULE ===== */
+
+
+    /*  BOOKING + QUESTIONS */
+    .side-by-side {
+      display: flex;
+      gap: 30px;
+      max-width: 1300px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+
+    .booking-half, .questions-half {
+      flex: 1 1 400px;
+      background: rgba(20,20,28,0.6);
+      backdrop-filter: blur(12px);
+      border-radius: 35px;
+      padding: 40px 30px;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      transition: 0.4s;
+    }
+
+
+    .booking-half:hover, .questions-half:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 60px rgba(249,168,37,0.5);
+    }
+
+
+    .booking-half h2, .questions-half h2 {
+      font-size: 32px;
+      margin-bottom: 30px;
+      color: #f9a825;
+    }
+
+
+    input, textarea, select {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      border-radius: 18px;
+      outline: none;
+      transition: 0.2s;
+    }
+
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #f9a825;
+      box-shadow: 0 0 12px #f9a82566;
+    }
+
+
+    /* CTA section */
+    .cta {
+      background: linear-gradient(45deg, #f9a825, #ff8800);
+      color: black;
+      padding: 120px 20px;
+      text-align: center;
+      clip-path: polygon(0 10%, 100% 0, 100% 90%, 0 100%);
+    }
+
+
+    /* emoji  */
+    .floating-emoji {
+      font-size: 2rem;
+      display: inline-block;
+      animation: float 3s ease-in-out infinite;
+      margin: 0 8px;
+    }
+
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+      100% { transform: translateY(0px); }
+    }
+
+
+    /* --- keyframes --- */
+    @keyframes rotate3d {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(360deg); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes moveBg {
+      0% { background-position: center top; }
+      100% { background-position: center bottom; }
+    }
+    @keyframes btnGlow {
+      0% { box-shadow: 0 0 10px #f9a825; }
+      100% { box-shadow: 0 0 30px #f9a825; }
+    }
+    @keyframes textGlow {
+      0% { text-shadow: 0 0 10px #f9a825; }
+      100% { text-shadow: 0 0 40px #f9a825; }
+    }
+
+
+    /* responsive */
+    @media(max-width: 900px) {
+      .hero { flex-direction: column; text-align: center; justify-content: center; }
+      nav { 
+        padding: 20px; 
+        flex-direction: column;
+        gap: 10px;
+      }
+      .nav-brand { margin-bottom: 10px; }
+      nav ul { gap: 20px; }
+      .logo-container { width: 160px; height: 160px; margin-top: 20px; }
+      .btn { margin: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- navigation -->
+  <nav>
+    <div class="nav-brand">DES <span>Family Fest</span></div>
+    <ul>
+      <li><a href="#zones">Zones</a></li>
+      <li><a href="#schedule">Schedule</a></li>
+      <li><a href="#booking-questions">Book & Ask</a></li>
+  
+    </ul>
+  </nav>
+
+
+  <!-- HERO  3D -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>DES <span>Family Fest</span></h1>
+      <h2 class="floating-emoji">🎡 🎈 🎠</h2>
+      <p>Creating unforgettable family celebrations with interactive zones and premium experiences, At
+        📍 Africa Park, Addis Ababa
+📅 February 28.</p>
+      
+      <div>
+        <button class="btn primary" onclick="fireConfetti()">🎟️ Get Tickets</button>
+        <button class="btn secondary" onclick="scrollToZones()">Explore Zones</button>
+      </div>
+    </div>
+   
+    <!-- 3D ROTATING LOGO -->
+    <div class="logo-container">
+      <div class="logo-box">
+        <img src="des final 4.png" alt="DES Family Fest Logo">
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ZONES -->
+  <section id="zones" class="reveal">
+    <h2 class="section-title">Experience The Zones</h2>
+    <div class="zone-grid">
+      <div class="zone-card"><div class="zone-front"><h3>🎠 Kids Zone</h3></div><div class="zone-back"><p>A vibrant, supervised play area filled with: • Inflatables and interactive games • Art & drawing corner • Face painting • Mascot interactions • Dedicated caretakers for safety</p></div></div>
+      <div class="zone-card"><div class="zone-front"><h3>🌸 Moms Zone</h3></div><div class="zone-back"><p>A calm and comfortable retreat designed just for moms: • Foot & hand massage • Light beauty touch-ups • Tea & refreshment corner • Shaded seating area</p></div></div>
+      <div class="zone-card"><div class="zone-front"><h3>⚽ Dads Zone</h3></div><div class="zone-back"><p>A fun, social zone where dads can unwind and connect: • Pool & table tennis • Mini football challenges • Board games • Relaxed seating area.</p></div></div>
+      <div class="zone-card"><div class="zone-front"><h3>👨‍👩‍👧 Family Zone</h3></div><div class="zone-back"><p>The heart of the event. • Family canvas painting • Group challenges • Interactive games • Professional photo moments • Shared activities for all ages.</p></div></div>
+    </div>
+  </section>
+
+
+  <!-- EVENT SCHEDULE -->
+  <section id="schedule">
+    <div class="schedule-container">
+      <div class="schedule-headline">EVENT SCHEDULE</div>
+      <div class="schedule-subheadline">Event Flow</div>
+      
+      <div class="schedule-item">
+        <span>Gates Open –</span>
+        <span>10:00 AM</span>
+      </div>
+      
+      <div class="schedule-item">
+        <span>Zones Activated –</span>
+        <span>10:30 AM</span>
+      </div>
+      
+      <div class="schedule-item">
+        <span>Family Activities Begin –</span>
+        <span>11:00 AM</span>
+      </div>
+      
+      <div class="schedule-item">
+        <span>Birthday Celebration Moment –</span>
+        <span>1:30 PM</span>
+      </div>
+      
+      <div class="schedule-item">
+        <span>Peak Family Engagement –</span>
+        <span>3:00 PM</span>
+      </div>
+      
+      <div class="schedule-item">
+        <span>Soft Close –</span>
+        <span>6:00 PM</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- BOOKING + QUESTIONS -->
+  <section id="booking-questions">
+    <div style="text-align: center; margin-bottom: 20px;">
+      <span class="floating-emoji">📅</span>
+      <span class="floating-emoji">❓</span>
+      <span class="floating-emoji">🎫</span>
+    </div>
+    <div class="side-by-side">
+      <!-- left: RESERVE YOUR SPOT -->
+      <div class="booking-half">
+        <h2>📝 Reserve Your Spot</h2>
+        <form>
+          <input type="text" placeholder="Full Name" required>
+          <input type="email" placeholder="Email Address" required>
+          <input type="tel" placeholder="Phone Number" required>
+          <select required>
+            <option value="">Select Tickets</option>
+            <option>1 Ticket</option>
+            <option>2 Tickets</option>
+            <option>3 Tickets</option>
+            <option>4+ Tickets</option>
+          </select>
+          <button type="button" class="btn primary" onclick="fireConfetti(); this.innerText='✨ Booked!'">Book Now</button>
+        </form>
+        <p style="margin-top: 15px; color: #aaa;"><i>secure your family pass</i></p>
+      </div>
+
+
+      <!-- right: HAVE QUESTIONS? -->
+      <div class="questions-half">
+        <h2>💬 Have Questions?</h2>
+        <form>
+          <input type="text" placeholder="Your Name">
+          <input type="email" placeholder="Your Email">
+          <textarea rows="3" placeholder="Ask us anything... "></textarea>
+          <button type="button" class="btn primary" onclick="confetti({particleCount:80, spread:70, origin:{y:0.5}}); this.innerText='✓ Sent! '">Send Message</button>
+        </form>
+        <div style="display: flex; gap: 12px; justify-content: center; margin-top: 20px;">
+          <span style="background: #2a2a35; padding: 8px 18px; border-radius: 40px;">📞 090909099</span>
+       
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+ 
+
+
+  <!-- CALL TO ACTION -->
+  <section id="cta-final" class="cta">
+    <h2 style="font-size: 3rem;">✨ Join Us. Celebrate Together. ✨</h2>
+    <button class="btn primary" onclick="fireConfetti(); this.innerText='🎟️ See you there!'" style="background: black; color: #f9a825; border:2px solid #f9a825;">Secure Your Spot</button>
+  </section>
+
+
+  <!-- footer -->
+  <div style="text-align: center; padding: 40px; border-top: 1px solid #2a2a35;">
+    <p>🎪 DES Family Fest · where families shine</p>
+   
+  </div>
+
+
+  <script>
+    window.addEventListener("scroll",()=>{
+      document.querySelector("nav").classList.toggle("scrolled",window.scrollY>50);
+    });
+
+
+    function scrollToZones(){
+      document.getElementById("zones").scrollIntoView({behavior:"smooth"});
+    }
+
+
+    function fireConfetti(){
+      confetti({particleCount:250, spread:120, origin:{y:0.6}});
+      confetti({particleCount:150, spread:70, origin:{y:0.5, x:0.2}, colors:['#f9a825', '#ffffff']});
+    }
+
+
+    // counters for stats -
+    window.onload = function() {
+      // Stats counters
+      console.log("DES Family Fest ready!");
+    };
+  </script>
+</body>
+</html>
