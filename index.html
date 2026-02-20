@@ -139,7 +139,7 @@ nav ul li a.active::after {
 width: 100%;
 }
 
-nav ul li a:hover, 
+nav ul li a:hover,
 nav ul li a.active {
 color: #f9a825;
 font-weight: 600;
@@ -987,6 +987,36 @@ align-items: center;
 gap: 15px;
 }
 
+/* Form Validation Styles - YELLOW ERRORS */
+.booking-half input.error,
+.booking-half select.error,
+.questions-half input.error,
+.questions-half textarea.error {
+border-color: #f9a825 !important;
+box-shadow: 0 0 15px rgba(249, 168, 37, 0.5) !important;
+}
+
+.booking-half input.valid,
+.booking-half select.valid,
+.questions-half input.valid,
+.questions-half textarea.valid {
+border-color: #00C851 !important;
+box-shadow: 0 0 10px rgba(0, 200, 81, 0.3) !important;
+}
+
+.error-message {
+color: #f9a825;
+font-size: 13px;
+margin-top: 5px;
+display: none;
+text-align: left;
+font-weight: 600;
+}
+
+.error-message.show {
+display: block;
+}
+
 input, textarea, select {
 width: 100%;
 padding: 16px;
@@ -1468,7 +1498,7 @@ Your browser does not support the video tag.
 <h1>DES Family Fest</h1>
 <p>
 Creating unforgettable family celebrations with interactive zones and premium experience.<br>
-<br>📍 <a href="https://www.google.com/maps/search/Africa+Park+Addis+Ababa" target="_blank" style="color: #f9a825; text-decoration: none; font-weight: 600; transition: 0.3s;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Africa Park, Addis Ababa</a> &nbsp;&nbsp;
+<br>📍 <a href="https://maps.app.goo.gl/NEeZ6ZghtsrozZQcA" target="_blank" style="color: #f9a825; text-decoration: none; font-weight: 600; transition: 0.3s;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Africa Park, Addis Ababa</a> &nbsp;&nbsp;
 </p>
 <div class="hero-btns">
 <button class="btn primary" onclick="fireConfetti()"> Buy Tickets</button>
@@ -1540,7 +1570,7 @@ Creating unforgettable family celebrations with interactive zones and premium ex
 <img src="momszone.jpg" alt="Moms Zone">
 <div class="zone-overlay"></div>
 <div class="zone-content">
-<h3> Moms Zone</h3>
+<h3>🌸 Moms Zone</h3>
 <p>A calm and comfortable retreat designed just for moms: foot & hand massage, light beauty touch-ups, tea & refreshment corner.</p>
 </div>
 </div>
@@ -1548,7 +1578,7 @@ Creating unforgettable family celebrations with interactive zones and premium ex
 <img src="Dadszone.jpg" alt="Dads Zone">
 <div class="zone-overlay"></div>
 <div class="zone-content">
-<h3> Dads Zone</h3>
+<h3>⚽ Dads Zone</h3>
 <p>A fun, social zone where dads can unwind: pool & table tennis, mini football challenges, board games & relaxed seating.</p>
 </div>
 </div>
@@ -1640,11 +1670,11 @@ Creating unforgettable family celebrations with interactive zones and premium ex
 <div class="faq-container">
 <div class="faq-item">
 <button class="faq-question">
-<span> What's included in my ticket?</span>
+<span> Is entry to DES Family Fest free?</span>
 <span class="faq-icon">+</span>
 </button>
 <div class="faq-answer">
-<p>Your ticket grants full access to all 4 interactive zones (Kids, Moms, Dads & Family), live entertainment, scheduled activities, and complimentary water stations. Food, merchandise, and premium experiences are available for separate purchase.</p>
+<p>Yes! Entry is free for everyone. Simply show up and be part of the celebration</p>
 </div>
 </div>
 <div class="faq-item">
@@ -1665,6 +1695,7 @@ Creating unforgettable family celebrations with interactive zones and premium ex
 <p>Africa Park offers ample free parking. We also recommend ride-shares (Ride, Feres) with drop-off at Gate B. Public transport routes 12, 24, and 45 stop directly at the park entrance.</p>
 </div>
 </div>
+
 </div>
 <div class="faq-cta">
 <p style="color: #000000; margin-bottom: 20px;">Still have questions?</p>
@@ -1677,30 +1708,36 @@ Creating unforgettable family celebrations with interactive zones and premium ex
 <div class="side-by-side">
 <div class="booking-half">
 <h2> Register Your Family</h2>
-<form>
-<input type="text" placeholder="Full Name" required>
-<input type="email" placeholder="Email Address" required>
-<input type="tel" placeholder="Phone Number" required>
-<select required>
-<option value="">Select Tickets</option>
-<option>1 Ticket</option>
-<option>2 Tickets</option>
-<option>3 Tickets</option>
-<option>4+ Tickets</option>
-</select>
-<button type="button" class="btn primary" onclick="fireConfetti(); this.innerText=' Booked!'">Book Now</button>
+<form id="bookingForm">
+<input type="text" id="fullName" placeholder="Full Name" required>
+<div class="error-message" id="nameError">Please enter your full name</div>
+
+<input type="email" id="email" placeholder="Email Address" required>
+<div class="error-message" id="emailError">Please enter a valid email address</div>
+
+<input type="tel" id="phone" placeholder="Phone Number" required>
+<div class="error-message" id="phoneError">Please enter your phone number</div>
+
+<!-- CHANGED: Number of People instead of Select Tickets -->
+<input type="number" id="numberOfPeople" placeholder="Number of People" min="1" max="20" required>
+<div class="error-message" id="peopleError">Please enter number of people (1-20)</div>
+
+<button type="button" class="btn primary" id="bookBtn" onclick="validateAndBook()">Book Now</button>
 </form>
 <p style="margin-top: 15px; color: #aaa; font-size: 14px;"><i>secure your family pass</i></p>
 </div>
 <div class="questions-half" id="contact">
 <h2> Have a Question?</h2>
-<form>
+<form id="questionForm">
 <div style="display: flex; gap: 10px;">
-<input type="text" placeholder="Your Name" style="flex: 1;">
-<input type="email" placeholder="Your Email" style="flex: 1;">
+<input type="text" id="questionName" placeholder="Your Name" style="flex: 1;" required>
+<div class="error-message" id="questionNameError" style="flex: 1;">Required</div>
 </div>
-<textarea rows="3" placeholder="Ask us anything... we reply fast! "></textarea>
-<button type="button" class="btn primary" onclick="confetti({particleCount:80, spread:70, origin:{y:0.5}}); this.innerText='✓ Sent! '">Send Message</button>
+<input type="email" id="questionEmail" placeholder="Your Email" style="flex: 1;" required>
+<div class="error-message" id="questionEmailError">Please enter a valid email</div>
+<textarea id="questionMessage" rows="3" placeholder="Ask us anything... we reply fast!" required></textarea>
+<div class="error-message" id="questionMessageError">Please enter your question</div>
+<button type="button" class="btn primary" id="sendBtn" onclick="validateAndSend()">Send Message</button>
 </form>
 <div style="display: flex; gap: 12px; justify-content: center; margin-top: 25px;">
 <span style="background: rgba(249, 168, 37, 0.1); padding: 10px 20px; border-radius: 40px; color: #f9a825; border: 1px solid #f9a825; font-weight: 600;">📞 0912642748</span>
@@ -1713,7 +1750,8 @@ Creating unforgettable family celebrations with interactive zones and premium ex
 <!-- CALL TO ACTION -->
 <section id="cta-final" class="cta">
 <h2 style="font-size: 3rem;">✨ Join Us. Celebrate Together. ✨</h2>
-<button class="btn primary" onclick="fireConfetti(); this.innerText=' See you there!'" style="background: black; color: #f9a825; border:2px solid #f9a825;">Secure Your Spot</button>
+<a href="#register"><button class="btn primary" style="background: black; color: #f9a825; border:2px solid #f9a825;">Secure Your Spot</button></a>
+
 </section>
 
 <!-- FOOTER -->
@@ -1758,7 +1796,6 @@ Creating unforgettable family celebrations with interactive zones and premium ex
 <li style="margin-bottom: 12px;"><a href="#about" style="color: #ccc; text-decoration: none; font-size: 16px; transition: 0.3s; font-weight: 500;">About Us</a></li>
 <li style="margin-bottom: 12px;"><a href="#zones" style="color: #ccc; text-decoration: none; font-size: 16px; transition: 0.3s; font-weight: 500;"> Zones</a></li>
 <li style="margin-bottom: 12px;"><a href="#schedule" style="color: #ccc; text-decoration: none; font-size: 16px; transition: 0.3s; font-weight: 500;"> Schedule</a></li>
-<li style="margin-bottom: 12px;"><a href="#highlights" style="color: #ccc; text-decoration: none; font-size: 16px; transition: 0.3s; font-weight: 500;"> Highlights</a></li>
 <li style="margin-bottom: 12px;"><a href="#faq" style="color: #ccc; text-decoration: none; font-size: 16px; transition: 0.3s; font-weight: 500;"> FAQ</a></li>
 <li><a href="#booking-questions" style="color: #ccc; text-decoration: none; font-size: 16px; transition: 0.3s; font-weight: 500;"> Tickets</a></li>
 </ul>
@@ -1830,6 +1867,7 @@ link.classList.add('active');
 });
 }
 window.addEventListener('scroll', highlightNavOnScroll);
+
 // === NAVBAR SCROLL EFFECT ===
 const navbar = document.getElementById('navbar');
 const zonesSection = document.getElementById('zones');
@@ -1842,6 +1880,7 @@ navbar.classList.remove('scrolled');
 }
 highlightNavOnScroll();
 });
+
 // === HAMBURGER MENU TOGGLE ===
 const hamburger = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobile-menu');
@@ -1864,17 +1903,240 @@ if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target) && mobileMen
 closeMobileMenu();
 }
 });
+
 // Video load
 document.querySelector('.hero-video').addEventListener('loadeddata', function() {
 this.classList.add('loaded');
 });
+
 function scrollToZones() {
 document.getElementById("zones").scrollIntoView({ behavior: "smooth" });
 }
+
+// === SCROLL TO BOOKING SECTION ===
+function scrollToBooking() {
+document.getElementById("booking-questions").scrollIntoView({ behavior: "smooth" });
+setTimeout(() => {
+document.getElementById("fullName").focus();
+}, 800);
+}
+
 function fireConfetti() {
 confetti({ particleCount: 250, spread: 120, origin: { y: 0.6 } });
 confetti({ particleCount: 150, spread: 70, origin: { y: 0.5, x: 0.2 }, colors: ['#f9a825', '#2a2a2a'] });
 }
+
+// === FORM VALIDATION - BOOKING ===
+function validateAndBook() {
+let isValid = true;
+
+const fullName = document.getElementById('fullName');
+const email = document.getElementById('email');
+const phone = document.getElementById('phone');
+const numberOfPeople = document.getElementById('numberOfPeople');
+const bookBtn = document.getElementById('bookBtn');
+
+clearErrors();
+
+if (fullName.value.trim() === '') {
+showError('nameError', fullName);
+isValid = false;
+}
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (!emailRegex.test(email.value.trim())) {
+showError('emailError', email);
+isValid = false;
+}
+
+if (phone.value.trim() === '' || phone.value.trim().length < 7) {
+showError('phoneError', phone);
+isValid = false;
+}
+
+if (numberOfPeople.value === '' || numberOfPeople.value < 1 || numberOfPeople.value > 20) {
+showError('peopleError', numberOfPeople);
+isValid = false;
+}
+
+if (isValid) {
+fireConfetti();
+bookBtn.innerText = '✓ Booked!';
+bookBtn.style.background = '#00C851';
+
+setTimeout(() => {
+document.getElementById('bookingForm').reset();
+bookBtn.innerText = 'Book Now';
+bookBtn.style.background = '#f9a825';
+}, 2000);
+} else {
+const bookingHalf = document.querySelector('.booking-half');
+bookingHalf.style.animation = 'shake 0.5s ease';
+setTimeout(() => {
+bookingHalf.style.animation = '';
+}, 500);
+}
+}
+
+// === FORM VALIDATION - QUESTIONS ===
+function validateAndSend() {
+let isValid = true;
+
+const questionName = document.getElementById('questionName');
+const questionEmail = document.getElementById('questionEmail');
+const questionMessage = document.getElementById('questionMessage');
+const sendBtn = document.getElementById('sendBtn');
+
+clearQuestionErrors();
+
+if (questionName.value.trim() === '') {
+showError('questionNameError', questionName);
+isValid = false;
+}
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (!emailRegex.test(questionEmail.value.trim())) {
+showError('questionEmailError', questionEmail);
+isValid = false;
+}
+
+if (questionMessage.value.trim() === '') {
+showError('questionMessageError', questionMessage);
+isValid = false;
+}
+
+if (isValid) {
+confetti({particleCount:80, spread:70, origin:{y:0.5}});
+sendBtn.innerText = '✓ Sent!';
+sendBtn.style.background = '#00C851';
+
+setTimeout(() => {
+document.getElementById('questionForm').reset();
+sendBtn.innerText = 'Send Message';
+sendBtn.style.background = '#f9a825';
+}, 2000);
+} else {
+const questionsHalf = document.querySelector('.questions-half');
+questionsHalf.style.animation = 'shake 0.5s ease';
+setTimeout(() => {
+questionsHalf.style.animation = '';
+}, 500);
+}
+}
+
+function showError(errorId, inputElement) {
+document.getElementById(errorId).classList.add('show');
+inputElement.classList.add('error');
+}
+
+function clearErrors() {
+const errors = document.querySelectorAll('.booking-half .error-message');
+const inputs = document.querySelectorAll('.booking-half input');
+
+errors.forEach(error => error.classList.remove('show'));
+inputs.forEach(input => {
+input.classList.remove('error');
+input.classList.remove('valid');
+});
+}
+
+function clearQuestionErrors() {
+const errors = document.querySelectorAll('.questions-half .error-message');
+const inputs = document.querySelectorAll('.questions-half input, .questions-half textarea');
+
+errors.forEach(error => error.classList.remove('show'));
+inputs.forEach(input => {
+input.classList.remove('error');
+input.classList.remove('valid');
+});
+}
+
+// Add shake animation
+const style = document.createElement('style');
+style.textContent = `
+@keyframes shake {
+0%, 100% { transform: translateX(0); }
+10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+20%, 40%, 60%, 80% { transform: translateX(10px); }
+}
+`;
+document.head.appendChild(style);
+
+// Real-time validation - Booking
+document.getElementById('fullName').addEventListener('input', function() {
+if (this.value.trim() !== '') {
+this.classList.remove('error');
+this.classList.add('valid');
+document.getElementById('nameError').classList.remove('show');
+} else {
+this.classList.remove('valid');
+}
+});
+
+document.getElementById('email').addEventListener('input', function() {
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (emailRegex.test(this.value.trim())) {
+this.classList.remove('error');
+this.classList.add('valid');
+document.getElementById('emailError').classList.remove('show');
+} else {
+this.classList.remove('valid');
+}
+});
+
+document.getElementById('phone').addEventListener('input', function() {
+if (this.value.trim().length >= 7) {
+this.classList.remove('error');
+this.classList.add('valid');
+document.getElementById('phoneError').classList.remove('show');
+} else {
+this.classList.remove('valid');
+}
+});
+
+// Number of People validation
+document.getElementById('numberOfPeople').addEventListener('input', function() {
+if (this.value >= 1 && this.value <= 20) {
+this.classList.remove('error');
+this.classList.add('valid');
+document.getElementById('peopleError').classList.remove('show');
+} else {
+this.classList.remove('valid');
+}
+});
+
+// Real-time validation - Questions
+document.getElementById('questionName').addEventListener('input', function() {
+if (this.value.trim() !== '') {
+this.classList.remove('error');
+this.classList.add('valid');
+document.getElementById('questionNameError').classList.remove('show');
+} else {
+this.classList.remove('valid');
+}
+});
+
+document.getElementById('questionEmail').addEventListener('input', function() {
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (emailRegex.test(this.value.trim())) {
+this.classList.remove('error');
+this.classList.add('valid');
+document.getElementById('questionEmailError').classList.remove('show');
+} else {
+this.classList.remove('valid');
+}
+});
+
+document.getElementById('questionMessage').addEventListener('input', function() {
+if (this.value.trim() !== '') {
+this.classList.remove('error');
+this.classList.add('valid');
+document.getElementById('questionMessageError').classList.remove('show');
+} else {
+this.classList.remove('valid');
+}
+});
+
 // === FAQ ACCORDION ===
 document.querySelectorAll('.faq-question').forEach(button => {
 button.addEventListener('click', () => {
@@ -1890,10 +2152,12 @@ button.classList.add('active');
 }
 });
 });
+
 document.querySelector('.faq-cta a')?.addEventListener('click', (e) => {
 e.preventDefault();
 document.querySelector('#contact').scrollIntoView({ behavior: 'smooth' });
 });
+
 // Initial highlight on load
 window.onload = function() {
 highlightNavOnScroll();
