@@ -4,10 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title> DES Family Fest</title>
-<!-- fonts & confetti -->
+<!-- fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@900&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <style>
 * {
 margin: 0;
@@ -1470,7 +1469,7 @@ font-size: 15px;
 <li><a href="#contact" class="nav-link">Contact</a></li>
 </ul>
 </nav>
-<a href="#booking-questions" class="nav-buy-btn" onclick="fireConfetti()">Buy Ticket</a>
+<a href="#booking-questions" class="nav-buy-btn">Buy Ticket</a>
 </div>
 
 <!-- === MOBILE MENU === -->
@@ -1484,7 +1483,7 @@ font-size: 15px;
 <li><a href="#faq" class="nav-link" onclick="closeMobileMenu()">FAQ</a></li>
 <li><a href="#contact" class="nav-link" onclick="closeMobileMenu()">Contact</a></li>
 </ul>
-<a href="#booking-questions" class="mobile-buy-btn" onclick="fireConfetti(); closeMobileMenu()">Buy Ticket</a>
+<a href="#booking-questions" class="mobile-buy-btn" onclick="closeMobileMenu()">Buy Ticket</a>
 </div>
 
 <!-- HERO WITH VIDEO BACKGROUND -->
@@ -1501,7 +1500,7 @@ Creating unforgettable family celebrations with interactive zones and premium ex
 <br>📍 <a href="https://maps.app.goo.gl/NEeZ6ZghtsrozZQcA" target="_blank" style="color: #f9a825; text-decoration: none; font-weight: 600; transition: 0.3s;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Africa Park, Addis Ababa</a> &nbsp;&nbsp;
 </p>
 <div class="hero-btns">
-<button class="btn primary" onclick="fireConfetti()"> Buy Tickets</button>
+<button class="btn primary"> Buy Tickets</button>
 <button class="btn secondary" onclick="scrollToZones()">Explore Zones</button>
 </div>
 </div>
@@ -1708,36 +1707,45 @@ Creating unforgettable family celebrations with interactive zones and premium ex
 <div class="side-by-side">
 <div class="booking-half">
 <h2> Register Your Family</h2>
-<form id="bookingForm">
-<input type="text" id="fullName" placeholder="Full Name" required>
-<div class="error-message" id="nameError">Please enter your full name</div>
+<form id="bookingForm" onsubmit="event.preventDefault(); handleBooking(event);">
+    <input type="hidden" name="_subject" value="New Booking Request from Website">
 
-<input type="email" id="email" placeholder="Email Address" required>
-<div class="error-message" id="emailError">Please enter a valid email address</div>
+    <input type="text" id="fullName" name="name" placeholder="Full Name" required>
+    <div class="error-message" id="nameError">Please enter your full name</div>
 
-<input type="tel" id="phone" placeholder="Phone Number" required>
-<div class="error-message" id="phoneError">Please enter your phone number</div>
+    <input type="email" id="email" name="email" placeholder="Email Address" required>
+    <div class="error-message" id="emailError">Please enter a valid email address</div>
 
-<!-- CHANGED: Number of People instead of Select Tickets -->
-<input type="number" id="numberOfPeople" placeholder="Number of People" min="1" max="20" required>
-<div class="error-message" id="peopleError">Please enter number of people (1-20)</div>
+    <input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
+    <div class="error-message" id="phoneError">Please enter your phone number</div>
 
-<button type="button" class="btn primary" id="bookBtn" onclick="validateAndBook()">Book Now</button>
+    <input type="number" id="numberOfPeople" name="guests" placeholder="Number of People" min="1" max="20" required>
+    <div class="error-message" id="peopleError">Please enter number of people (1-20)</div>
+    
+    <p style="font-size:12px; color:#aaa; margin-bottom:15px; font-style:italic;">*Please copy your details above and send them to us via Instagram.</p>
+
+    <button type="submit" class="btn primary" id="bookBtn">Book </button>
 </form>
-<p style="margin-top: 15px; color: #aaa; font-size: 14px;"><i>secure your family pass</i></p>
 </div>
 <div class="questions-half" id="contact">
 <h2> Have a Question?</h2>
-<form id="questionForm">
-<div style="display: flex; gap: 10px;">
-<input type="text" id="questionName" placeholder="Your Name" style="flex: 1;" required>
-<div class="error-message" id="questionNameError" style="flex: 1;">Required</div>
-</div>
-<input type="email" id="questionEmail" placeholder="Your Email" style="flex: 1;" required>
-<div class="error-message" id="questionEmailError">Please enter a valid email</div>
-<textarea id="questionMessage" rows="3" placeholder="Ask us anything... we reply fast!" required></textarea>
-<div class="error-message" id="questionMessageError">Please enter your question</div>
-<button type="button" class="btn primary" id="sendBtn" onclick="validateAndSend()">Send Message</button>
+<form id="questionForm" onsubmit="event.preventDefault(); handleQuestion(event);">
+    <input type="hidden" name="_subject" value="New Question from Website">
+
+    <div style="display: flex; gap: 10px;">
+    <input type="text" id="questionName" name="name" placeholder="Your Name" style="flex: 1;" required>
+    <div class="error-message" id="questionNameError" style="flex: 1;">Required</div>
+    </div>
+    
+    <input type="email" id="questionEmail" name="email" placeholder="Your Email" style="flex: 1;" required>
+    <div class="error-message" id="questionEmailError">Please enter a valid email</div>
+    
+    <textarea id="questionMessage" name="message" rows="3" placeholder="Ask us anything... we reply fast!" required></textarea>
+    <div class="error-message" id="questionMessageError">Please enter your question</div>
+    
+    <p style="font-size:12px; color:#aaa; margin-bottom:15px; font-style:italic;">*Please copy your question above and send it to us via Instagram.</p>
+
+    <button type="submit" class="btn primary" id="sendBtn">Ask </button>
 </form>
 <div style="display: flex; gap: 12px; justify-content: center; margin-top: 25px;">
 <span style="background: rgba(249, 168, 37, 0.1); padding: 10px 20px; border-radius: 40px; color: #f9a825; border: 1px solid #f9a825; font-weight: 600;">📞 0912642748</span>
@@ -1913,228 +1921,136 @@ function scrollToZones() {
 document.getElementById("zones").scrollIntoView({ behavior: "smooth" });
 }
 
-// === SCROLL TO BOOKING SECTION ===
-function scrollToBooking() {
-document.getElementById("booking-questions").scrollIntoView({ behavior: "smooth" });
-setTimeout(() => {
-document.getElementById("fullName").focus();
-}, 800);
+// === FORM VALIDATION & INSTAGRAM DEEP LINK ===
+
+// Helper to show errors
+function showError(errorId, inputElement) {
+document.getElementById(errorId).classList.add('show');
+inputElement.classList.add('error');
+inputElement.classList.remove('valid');
 }
 
-function fireConfetti() {
-confetti({ particleCount: 250, spread: 120, origin: { y: 0.6 } });
-confetti({ particleCount: 150, spread: 70, origin: { y: 0.5, x: 0.2 }, colors: ['#f9a825', '#2a2a2a'] });
+// Helper to clear errors
+function clearErrors(formType) {
+const prefix = formType === 'booking' ? '' : 'question';
+const errors = document.querySelectorAll(`.${formType}-half .error-message`);
+const inputs = document.querySelectorAll(`.${formType}-half input, .${formType}-half textarea`);
+
+errors.forEach(error => error.classList.remove('show'));
+inputs.forEach(input => {
+input.classList.remove('error');
+input.classList.remove('valid');
+});
 }
 
-// === FORM VALIDATION - BOOKING ===
-function validateAndBook() {
+// Booking Form Handler
+function handleBooking(event) {
+event.preventDefault();
 let isValid = true;
+const form = event.target;
 
+// Validation
 const fullName = document.getElementById('fullName');
 const email = document.getElementById('email');
 const phone = document.getElementById('phone');
 const numberOfPeople = document.getElementById('numberOfPeople');
-const bookBtn = document.getElementById('bookBtn');
 
-clearErrors();
+clearErrors('booking');
 
 if (fullName.value.trim() === '') {
 showError('nameError', fullName);
 isValid = false;
 }
-
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 if (!emailRegex.test(email.value.trim())) {
 showError('emailError', email);
 isValid = false;
 }
-
 if (phone.value.trim() === '' || phone.value.trim().length < 7) {
 showError('phoneError', phone);
 isValid = false;
 }
-
 if (numberOfPeople.value === '' || numberOfPeople.value < 1 || numberOfPeople.value > 20) {
 showError('peopleError', numberOfPeople);
 isValid = false;
 }
 
 if (isValid) {
-fireConfetti();
-bookBtn.innerText = '✓ Booked!';
-bookBtn.style.background = '#00C851';
-
-setTimeout(() => {
-document.getElementById('bookingForm').reset();
-bookBtn.innerText = 'Book Now';
-bookBtn.style.background = '#f9a825';
-}, 2000);
+// Direct Link to Instagram DM (Deep Link)
+window.location.href = "https://ig.me/m/des_family_fest";
 } else {
 const bookingHalf = document.querySelector('.booking-half');
 bookingHalf.style.animation = 'shake 0.5s ease';
-setTimeout(() => {
-bookingHalf.style.animation = '';
-}, 500);
+setTimeout(() => { bookingHalf.style.animation = ''; }, 500);
 }
 }
 
-// === FORM VALIDATION - QUESTIONS ===
-function validateAndSend() {
+// Question Form Handler
+function handleQuestion(event) {
+event.preventDefault();
 let isValid = true;
+const form = event.target;
 
+// Validation
 const questionName = document.getElementById('questionName');
 const questionEmail = document.getElementById('questionEmail');
 const questionMessage = document.getElementById('questionMessage');
-const sendBtn = document.getElementById('sendBtn');
 
-clearQuestionErrors();
+clearErrors('questions');
 
 if (questionName.value.trim() === '') {
 showError('questionNameError', questionName);
 isValid = false;
 }
-
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 if (!emailRegex.test(questionEmail.value.trim())) {
 showError('questionEmailError', questionEmail);
 isValid = false;
 }
-
 if (questionMessage.value.trim() === '') {
 showError('questionMessageError', questionMessage);
 isValid = false;
 }
 
 if (isValid) {
-confetti({particleCount:80, spread:70, origin:{y:0.5}});
-sendBtn.innerText = '✓ Sent!';
-sendBtn.style.background = '#00C851';
-
-setTimeout(() => {
-document.getElementById('questionForm').reset();
-sendBtn.innerText = 'Send Message';
-sendBtn.style.background = '#f9a825';
-}, 2000);
+// Direct Link to Instagram DM (Deep Link)
+window.location.href = "https://ig.me/m/des_family_fest";
 } else {
 const questionsHalf = document.querySelector('.questions-half');
 questionsHalf.style.animation = 'shake 0.5s ease';
-setTimeout(() => {
-questionsHalf.style.animation = '';
-}, 500);
+setTimeout(() => { questionsHalf.style.animation = ''; }, 500);
 }
 }
 
-function showError(errorId, inputElement) {
-document.getElementById(errorId).classList.add('show');
-inputElement.classList.add('error');
-}
-
-function clearErrors() {
-const errors = document.querySelectorAll('.booking-half .error-message');
-const inputs = document.querySelectorAll('.booking-half input');
-
-errors.forEach(error => error.classList.remove('show'));
-inputs.forEach(input => {
-input.classList.remove('error');
-input.classList.remove('valid');
-});
-}
-
-function clearQuestionErrors() {
-const errors = document.querySelectorAll('.questions-half .error-message');
-const inputs = document.querySelectorAll('.questions-half input, .questions-half textarea');
-
-errors.forEach(error => error.classList.remove('show'));
-inputs.forEach(input => {
-input.classList.remove('error');
-input.classList.remove('valid');
-});
-}
-
-// Add shake animation
-const style = document.createElement('style');
-style.textContent = `
-@keyframes shake {
-0%, 100% { transform: translateX(0); }
-10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
-20%, 40%, 60%, 80% { transform: translateX(10px); }
-}
-`;
-document.head.appendChild(style);
-
-// Real-time validation - Booking
-document.getElementById('fullName').addEventListener('input', function() {
-if (this.value.trim() !== '') {
-this.classList.remove('error');
-this.classList.add('valid');
-document.getElementById('nameError').classList.remove('show');
-} else {
-this.classList.remove('valid');
-}
+// Real-time validation helpers (Optional, kept for UX)
+['fullName', 'email', 'phone', 'numberOfPeople'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', function() {
+        if(this.checkValidity()) {
+            this.classList.remove('error');
+            this.classList.add('valid');
+            const errId = id + 'Error'; 
+            const errEl = document.getElementById(id === 'numberOfPeople' ? 'peopleError' : errId);
+            if(errEl) errEl.classList.remove('show');
+        } else {
+            this.classList.remove('valid');
+        }
+    });
 });
 
-document.getElementById('email').addEventListener('input', function() {
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-if (emailRegex.test(this.value.trim())) {
-this.classList.remove('error');
-this.classList.add('valid');
-document.getElementById('emailError').classList.remove('show');
-} else {
-this.classList.remove('valid');
-}
-});
-
-document.getElementById('phone').addEventListener('input', function() {
-if (this.value.trim().length >= 7) {
-this.classList.remove('error');
-this.classList.add('valid');
-document.getElementById('phoneError').classList.remove('show');
-} else {
-this.classList.remove('valid');
-}
-});
-
-// Number of People validation
-document.getElementById('numberOfPeople').addEventListener('input', function() {
-if (this.value >= 1 && this.value <= 20) {
-this.classList.remove('error');
-this.classList.add('valid');
-document.getElementById('peopleError').classList.remove('show');
-} else {
-this.classList.remove('valid');
-}
-});
-
-// Real-time validation - Questions
-document.getElementById('questionName').addEventListener('input', function() {
-if (this.value.trim() !== '') {
-this.classList.remove('error');
-this.classList.add('valid');
-document.getElementById('questionNameError').classList.remove('show');
-} else {
-this.classList.remove('valid');
-}
-});
-
-document.getElementById('questionEmail').addEventListener('input', function() {
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-if (emailRegex.test(this.value.trim())) {
-this.classList.remove('error');
-this.classList.add('valid');
-document.getElementById('questionEmailError').classList.remove('show');
-} else {
-this.classList.remove('valid');
-}
-});
-
-document.getElementById('questionMessage').addEventListener('input', function() {
-if (this.value.trim() !== '') {
-this.classList.remove('error');
-this.classList.add('valid');
-document.getElementById('questionMessageError').classList.remove('show');
-} else {
-this.classList.remove('valid');
-}
+['questionName', 'questionEmail', 'questionMessage'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', function() {
+        if(this.checkValidity()) {
+            this.classList.remove('error');
+            this.classList.add('valid');
+            const errId = id + 'Error';
+            const errEl = document.getElementById(errId);
+            if(errEl) errEl.classList.remove('show');
+        } else {
+            this.classList.remove('valid');
+        }
+    });
 });
 
 // === FAQ ACCORDION ===
