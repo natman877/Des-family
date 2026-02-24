@@ -20,7 +20,6 @@ background: #fce5c8;
 color: #2a2a2a;
 overflow-x: hidden;
 }
-
 /* === MOTIVATIONAL POPUP STYLES === */
 .modal-overlay {
 position: fixed;
@@ -195,7 +194,6 @@ to { opacity: 1; transform: translateY(0); }
 0%, 100% { transform: scale(1); }
 50% { transform: scale(1.1); }
 }
-
 /* --- NAVIGATION --- */
 .nav-container {
 position: fixed;
@@ -1295,6 +1293,13 @@ padding: 0;
 border-bottom: none;
 box-shadow: none;
 }
+/* Hide logo on mobile - only show hamburger */
+.nav-logo {
+display: none !important;
+}
+.nav-container.scrolled .nav-logo {
+display: none !important;
+}
 .hero {
 flex-direction: column;
 text-align: center;
@@ -1406,19 +1411,42 @@ font-size: 16px;
 min-width: 80px;
 margin-left: 15px;
 }
-/* Modal Responsive */
+/* Modal Responsive - Make it scrollable */
 .modal-content {
 padding: 30px 20px;
+max-height: 85vh;
+overflow-y: auto;
 }
+
 .modal-header h2 {
 font-size: 24px;
 }
+
 .modal-benefits {
 grid-template-columns: 1fr;
 }
+
 .spots-left {
 font-size: 20px;
 }
+
+.modal-urgency {
+margin: 20px 0;
+}
+
+/* === FIX FOR CONTACT BUTTONS IN HAVE A QUESTION SECTION === */
+/* Stack the Phone and Email buttons vertically */
+.contact-row {
+flex-direction: column !important;
+gap: 15px !important;
+}
+
+.contact-row span {
+width: 100% !important;
+text-align: center !important;
+box-sizing: border-box !important;
+}
+/* ============================================== */
 }
 @media (max-width: 480px) {
 .schedule-container {
@@ -1665,7 +1693,7 @@ Creating unforgettable family celebrations with interactive zones and premium ex
 <span>1:30 PM</span>
 </div>
 <div class="schedule-item">
-<span>Peak Family Engagement –</span>
+<span>Special Performances –</span>
 <span>3:00 PM</span>
 </div>
 <div class="schedule-item">
@@ -1765,7 +1793,8 @@ Creating unforgettable family celebrations with interactive zones and premium ex
 <p style="font-size:12px; color:#f9a825; margin-bottom:15px; font-style:italic; font-weight: 600;"> Your question will be sent via Telegram</p>
 <button type="submit" class="btn primary" id="sendBtn">Ask via Telegram</button>
 </form>
-<div style="display: flex; gap: 12px; justify-content: center; margin-top: 25px;">
+<!-- Added class="contact-row" to this specific div -->
+<div class="contact-row" style="display: flex; gap: 12px; justify-content: center; margin-top: 25px;">
 <span style="background: rgba(249, 168, 37, 0.1); padding: 10px 20px; border-radius: 40px; color: #f9a825; border: 1px solid #f9a825; font-weight: 600;">📞 0912642748</span>
 <span style="background: rgba(255, 255, 255, 0.1); padding: 10px 20px; border-radius: 40px; color: white;"> contact@krinfud.com</span>
 </div>
@@ -1777,7 +1806,6 @@ Creating unforgettable family celebrations with interactive zones and premium ex
 <h2 style="font-size: 3rem;">✨ Join Us. Celebrate Together. ✨</h2>
 <button class="btn primary" onclick="openModal()" style="background: black; color: #f9a825; border:2px solid #f9a825;">Secure Your Spot</button>
 </section>
-
 <!-- === MOTIVATIONAL POPUP MODAL === -->
 <div class="modal-overlay" id="motivationalModal">
 <div class="modal-content">
@@ -1811,14 +1839,13 @@ Creating unforgettable family celebrations with interactive zones and premium ex
 <div class="modal-urgency">
 <h3>⚡ Limited Spots Available!</h3>
 <p>Registration is filling up fast. Secure your family's spot now!</p>
-<div class="spots-left">🔥 Only 50 spots left this week!</div>
+<div class="spots-left">🔥 Only Limited spots left!</div>
 </div>
 <div class="modal-cta">
 <button class="modal-cta-btn" onclick="closeModal(); scrollToBooking()">👉 Register My Family Now</button>
 </div>
 </div>
 </div>
-
 <!-- FOOTER -->
 <footer class="footer">
 <div class="footer-content">
